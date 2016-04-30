@@ -52,7 +52,7 @@ tspan = t;
 % Try solving the system at a guess for good parameter values
 p0 = [.01 .1];
 
-Gp_opt = sir_optimize(GInf.', GDeath.', tspan, y0, p0);
+Gp_opt = sir_optimize(GInf.', GDeath.', tspan, y0, p0)
 
 [t,Gy] = ode45(@sir_ode, tspan, y0, [], Gp_opt);
 
@@ -83,7 +83,7 @@ tspan = t;
 % Try solving the system at a guess for good parameter values
 p0 = [.01 .1];
 
-Sp_opt = sir_optimize(SInf.', SDeath.', tspan, y0, p0);
+Sp_opt = sir_optimize(SInf.', SDeath.', tspan, y0, p0)
 
 [t,Sy] = ode45(@sir_ode, tspan, y0, [], Sp_opt);
 
