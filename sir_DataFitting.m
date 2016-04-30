@@ -1,4 +1,4 @@
-% developed by Baihan Lin
+% developed by Baihan Lin, Apr 2014
 % Ebola Modeling
 % Data Fitting
 
@@ -37,7 +37,7 @@ title('Infectious & Death in GUI and SL');
 xlabel('month');
 ylabel('number');
 legend('GInf','SInf', 'GDeath', 'SDeath','Location','northwest');
-% close(fig1);
+close(fig1);
 
 % For GUI
 
@@ -57,7 +57,7 @@ Gp_opt = sir_optimize(GInf.', GDeath.', tspan, y0, p0)
 [t,Gy] = ode45(@sir_ode, tspan, y0, [], Gp_opt);
 
 fig2 = figure;
-plot(t, Gy(:,1), 'linewidth', 2, 'Color',[0 0.4470 0.7410]); hold on;
+plot(t, Gy(:,1)/10000, 'linewidth', 2, 'Color',[0 0.4470 0.7410]); hold on;
 plot(t, Gy(:,2), 'linewidth', 2, 'Color',[0.8500 0.3250 0.0980]);
 plot(t, Gy(:,3), 'linewidth', 2, 'Color',[0.4660 0.6740 0.1880]);
 plot(t, GInf,'*', 'markersize', 10, 'Color',[0.8500 0.3250 0.0980]);
@@ -88,7 +88,7 @@ Sp_opt = sir_optimize(SInf.', SDeath.', tspan, y0, p0)
 [t,Sy] = ode45(@sir_ode, tspan, y0, [], Sp_opt);
 
 fig3 = figure;
-plot(t, Sy(:,1), 'linewidth', 2, 'Color',[0 0.4470 0.7410]); hold on;
+plot(t, Sy(:,1)/10000, 'linewidth', 2, 'Color',[0 0.4470 0.7410]); hold on;
 plot(t, Sy(:,2), 'linewidth', 2, 'Color',[0.8500 0.3250 0.0980]);
 plot(t, Sy(:,3), 'linewidth', 2, 'Color',[0.4660 0.6740 0.1880]);
 plot(t, SInf,'*', 'markersize', 10, 'Color',[0.8500 0.3250 0.0980]);

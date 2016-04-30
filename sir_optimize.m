@@ -1,3 +1,7 @@
+% developed by Baihan Lin, Apr 2014
+% Ebola Modeling
+% Data Fitting
+
 function p_opt = sir_optimize(Idat, Ddat, tspan, y0, p0)
 
 p_opt = fminsearch(@sir_disc_nested, p0);

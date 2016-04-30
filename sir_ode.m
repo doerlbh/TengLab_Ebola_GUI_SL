@@ -1,3 +1,7 @@
+% developed by Baihan Lin, Apr 2014
+% Ebola Modeling
+% Data Fitting
+
 function dydt = sir_ode(t,y,p)
 
 beta = p(1);
