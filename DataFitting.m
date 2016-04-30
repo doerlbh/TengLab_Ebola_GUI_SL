@@ -33,4 +33,3 @@ xlabel('month');
 ylabel('number');
 legend('GCase','SCase', 'GDeath', 'GDeath','Location','northwest');
 
-
