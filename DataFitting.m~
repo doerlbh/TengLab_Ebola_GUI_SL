@@ -29,10 +29,10 @@ GCFR   = GUI(:, 5);
 SCFR   =  SL(:, 5);
 
 fig1 = figure;
-plot(t, GInf,'LineWidth', 2); hold on
-plot(t, SInf,'LineWidth', 2);
-plot(t, GDeath,'LineWidth', 2);
-plot(t, SDeath,'LineWidth', 2);
+plot(t, GInf, 'red', 'LineWidth', 2); hold on
+plot(t, SInf, 'blue', 'LineWidth', 2);
+plot(t, GDeath, 'red--', 'LineWidth', 2);
+plot(t, SDeath, 'blue--', 'LineWidth', 2);
 title('Infectious & Death in GUI and SL');
 xlabel('month');
 ylabel('number');
@@ -41,9 +41,8 @@ legend('GInf','SInf', 'GDeath', 'SDeath','Location','northwest');
 
 % For GUI
 
-% Initial conditions: 1997 susceptible, 2 infected, 0 recovered? 2000
-% population
-y0 = [1997 3 0 2000];
+% Initial conditions: 1997 susceptible, 2 infected, 0 recovered
+y0 = [1997 3 0];
 
 % tspan will hold the times for which to solve the system
 % of ODEs. We want to solve it at the times that
@@ -53,23 +52,29 @@ tspan = t;
 % Try solving the system at a guess for good parameter values
 p0 = [.01 .1];
 
-Gp_opt = sir_optimize(GInf.', tspan, y0, p0);
+Gp_opt = sir_optimize(GInf.', GDeath.', tspan, y0, p0);
 
 [t,Gy] = ode45(@sir_ode, tspan, y0, [], Gp_opt);
 
 fig2 = figure;
-plot(t, Gy, 'linewidth', 2);
+plot(t, Gy(:,1), 'linewidth', 2);
+plot(t, Gy(:,2), 'orange', 'linewidth', 2);
+plot(t, Gy(:,3), 'g', 'linewidth', 2);
 hold on;
-plot(t, GInf, 'k*', 'markersize', 10);
-legend('Pre-S', 'Pre-I', 'Pre-R', 'GInf', 'Location', 'northwest');
+plot(t, GInf, 'orange*', 'markersize', 10);
+plot(t, GDeath, 'g+', 'markersize', 10);
+title('Prediction & Data in GUI');
+xlabel('month');
+ylabel('number');
+legend('Pre-S', 'Pre-I', 'Pre-R', 'GInf', 'GDeath', 'Location', 'northwest');
 set(gca, 'FontSize', 15);
 % close(fig2);
 
 
 % For SL
 
-% Initial conditions: 1000 susceptible, 3 infected, 0 recovered
-y0 = [9997 3 0 2000];
+% Initial conditions: 9997 susceptible, 3 infected, 0 recovered
+y0 = [9997 3 0];
 
 % tspan will hold the times for which to solve the system
 % of ODEs. We want to solve it at the times that
@@ -79,7 +84,7 @@ tspan = t;
 % Try solving the system at a guess for good parameter values
 p0 = [.01 .1];
 
-Sp_opt = sir_optimize(SInf.', tspan, y0, p0);
+Sp_opt = sir_optimize(SInf.', SDeath.', tspan, y0, p0);
 
 [t,Sy] = ode45(@sir_ode, tspan, y0, [], Sp_opt);
 
@@ -87,6 +92,10 @@ fig3 = figure;
 plot(t, Sy, 'linewidth', 2);
 hold on;
 plot(t, SInf, 'k*', 'markersize', 10);
-legend('Pre-S', 'Pre-I', 'Pre-R', 'SInf', 'Location', 'northwest');
+plot(t, SDeath, 'k+', 'markersize', 10);
+title('Prediction & Data in SL');
+xlabel('month');
+ylabel('number');
+legend('Pre-S', 'Pre-I', 'Pre-R', 'SInf', 'SDeath', 'Location', 'northwest');
 set(gca, 'FontSize', 15);
 % close(fig3);

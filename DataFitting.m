@@ -29,10 +29,10 @@ GCFR   = GUI(:, 5);
 SCFR   =  SL(:, 5);
 
 fig1 = figure;
-plot(t, GInf,'LineWidth', 2); hold on
-plot(t, SInf,'LineWidth', 2);
-plot(t, GDeath,'LineWidth', 2);
-plot(t, SDeath,'LineWidth', 2);
+plot(t, GInf, 'r', 'LineWidth', 2); hold on
+plot(t, SInf, 'b', 'LineWidth', 2);
+plot(t, GDeath, 'r--', 'LineWidth', 2);
+plot(t, SDeath, 'b--', 'LineWidth', 2);
 title('Infectious & Death in GUI and SL');
 xlabel('month');
 ylabel('number');
@@ -57,10 +57,14 @@ Gp_opt = sir_optimize(GInf.', GDeath.', tspan, y0, p0);
 [t,Gy] = ode45(@sir_ode, tspan, y0, [], Gp_opt);
 
 fig2 = figure;
-plot(t, Gy, 'linewidth', 2);
-hold on;
-plot(t, GInf, 'k*', 'markersize', 10);
-plot(t, GDeath, 'k+', 'markersize', 10);
+plot(t, Gy(:,1), 'linewidth', 2, 'Color',[0 0.4470 0.7410]); hold on;
+plot(t, Gy(:,2), 'linewidth', 2, 'Color',[0.8500 0.3250 0.0980]);
+plot(t, Gy(:,3), 'linewidth', 2, 'Color',[0.4660 0.6740 0.1880]);
+plot(t, GInf,'*', 'markersize', 10, 'Color',[0.8500 0.3250 0.0980]);
+plot(t, GDeath, '+', 'markersize', 10, 'Color',[0.4660 0.6740 0.1880]);
+title('Prediction & Data in GUI');
+xlabel('month');
+ylabel('number');
 legend('Pre-S', 'Pre-I', 'Pre-R', 'GInf', 'GDeath', 'Location', 'northwest');
 set(gca, 'FontSize', 15);
 % close(fig2);
@@ -84,10 +88,14 @@ Sp_opt = sir_optimize(SInf.', SDeath.', tspan, y0, p0);
 [t,Sy] = ode45(@sir_ode, tspan, y0, [], Sp_opt);
 
 fig3 = figure;
-plot(t, Sy, 'linewidth', 2);
-hold on;
-plot(t, SInf, 'k*', 'markersize', 10);
-plot(t, SDeath, 'k+', 'markersize', 10);
+plot(t, Sy(:,1), 'linewidth', 2, 'Color',[0 0.4470 0.7410]); hold on;
+plot(t, Sy(:,2), 'linewidth', 2, 'Color',[0.8500 0.3250 0.0980]);
+plot(t, Sy(:,3), 'linewidth', 2, 'Color',[0.4660 0.6740 0.1880]);
+plot(t, SInf,'*', 'markersize', 10, 'Color',[0.8500 0.3250 0.0980]);
+plot(t, SDeath, '+', 'markersize', 10, 'Color',[0.4660 0.6740 0.1880]);
+title('Prediction & Data in SL');
+xlabel('month');
+ylabel('number');
 legend('Pre-S', 'Pre-I', 'Pre-R', 'SInf', 'SDeath', 'Location', 'northwest');
 set(gca, 'FontSize', 15);
 % close(fig3);

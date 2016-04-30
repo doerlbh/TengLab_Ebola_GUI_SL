@@ -4,7 +4,7 @@ function disc = sir_discrepancy(p, Idat, Ddat, tspan, y0)
 I = y(:, 2);
 R = y(:, 3); % for test.m this can be ignored.
 
-% disc = sum((I - dat').^2);
+% disc = sum((I - Idat').^2);
 
 disc = sum((I - Idat').^2) + sum((R - Ddat.').^2); 
 % for test.m chose the above one.
