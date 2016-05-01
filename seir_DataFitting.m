@@ -50,9 +50,15 @@ y0 = [1997 0 3 0];
 tspan = t;
 
 % Try solving the system at a guess for good parameter values
-p0 = [.01 .1 1];
+p0 = [.01 .1 1 0.1 0.1];
 
 Gp_opt = seir_optimize(GInf.', GDeath.', tspan, y0, p0)
+Gb = Gp_opt(1);
+Gg = Gp_opt(2);
+Gk = Gp_opt(3);
+Gl = Gp_opt(4);
+Gu = Gp_opt(5);
+GR0 = Gk*Gb*Gl/(Gu*(Gk+Gu)*(Gg+Gu))
 
 [t,Gy] = ode45(@seir_ode, tspan, y0, [], Gp_opt);
 
@@ -81,9 +87,15 @@ y0 = [9997 0 3 0];
 tspan = t;
 
 % Try solving the system at a guess for good parameter values
-p0 = [.01 .1 1];
+p0 = [.01 .1 1 0.1 0.1];
 
 Sp_opt = seir_optimize(SInf.', SDeath.', tspan, y0, p0)
+Sb = Sp_opt(1);
+Sg = Sp_opt(2);
+Sk = Sp_opt(3);
+Sl = Sp_opt(4);
+Su = Sp_opt(5);
+SR0 = Sk*Sb*Sl/(Su*(Sk+Su)*(Sg+Su))
 
 [t,Sy] = ode45(@seir_ode, tspan, y0, [], Sp_opt);
 
@@ -101,3 +113,28 @@ set(gca, 'FontSize', 15);
 % close(fig3);
 
 % Explore how population size can affect models
+figure;
+
+ind = 1;
+for i = 0.5:0.1:2
+    psi = 1.08*i;    
+    R0(ind) = (1/(gamma1+psi))*(beta1*Pop + (beta3*Pop*psi/gamma2) + (beta2*Pop*rho1*gamma1));
+
+    odejac = @(t,u,up) jac(u, alpha, beta1, beta2, beta3, delta, gamma1, gamma2, psi, rho1, rho2, omega); 
+    odefun =@(t,u) SEIHRRR(t, u, alpha, beta1, beta2, beta3, delta, gamma1, gamma2, psi, rho1, rho2, omega);
+    opts = odeset('Jacobian', odejac);
+    %[t,y] = ode23s(odefun, tSpan, y0, opts);
+    [t,y] = ode15s(odefun, tSpan, y0,opts);
+
+    %plot(t, y(:,3)+y(:,4))
+
+    Infected(:,ind) = y(:,3)+y(:,4);
+    plot(t, log10(Infected(:,ind)),'--')
+    hold on
+    ind = ind+1;
+end
+plot(t, log10(Infected(:,6)),'r')
+axis([289,349,2.8,3.8])
+xlabel('$t$ (days)','Interpreter','LaTex','FontSize',14), ylabel('$\log_{\ 10}I(t)$','Interpreter','LaTex','FontSize',14)
+title('Guinea','Interpreter','LaTex','FontSize',14)
+

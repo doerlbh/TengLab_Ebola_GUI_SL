@@ -53,6 +53,7 @@ tspan = t;
 p0 = [.01 .1];
 
 Gp_opt = sir_optimize(GInf.', GDeath.', tspan, y0, p0)
+GR0 = Gp_opt(1) / Gp_opt(2)
 
 [t,Gy] = ode45(@sir_ode, tspan, y0, [], Gp_opt);
 
@@ -84,6 +85,7 @@ tspan = t;
 p0 = [.01 .1];
 
 Sp_opt = sir_optimize(SInf.', SDeath.', tspan, y0, p0)
+SR0 = Sp_opt(1) / Sp_opt(2)
 
 [t,Sy] = ode45(@sir_ode, tspan, y0, [], Sp_opt);
 
