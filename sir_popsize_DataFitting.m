@@ -41,8 +41,8 @@ close(fig1);
 
 % For GUI
 
-% Initial conditions: 1997 susceptible, 0 exposed, 3 infected, 0 recovered
-y0 = [1997 0 3 0];
+% Initial conditions: 1997 susceptible, 2 infected, 0 recovered
+y0 = [1997 3 0];
 
 % tspan will hold the times for which to solve the system
 % of ODEs. We want to solve it at the times that
@@ -50,14 +50,19 @@ y0 = [1997 0 3 0];
 tspan = t;
 
 % Try solving the system at a guess for good parameter values
-p0 = [.01 .1 1];
+p0 = [.01 .1];
 
-Gp_opt = seir_optimize(GInf.', GDeath.', tspan, y0, p0)
+d0 = [y0, p0];
 
-[t,Gy] = ode45(@seir_ode, tspan, y0, [], Gp_opt);
+Gd_opt = sir_popsize_optimize(GInf.', GDeath.', tspan, d0)
+
+Gp_opt = Gdopt(1:2);
+Gy0 = Gdopt(3:5);
+
+[t,Gy] = ode45(@sir_ode, tspan, y0, [], Gp_opt);
 
 fig2 = figure;
-plot(t, Gy(:,1), 'linewidth', 2, 'Color',[0 0.4470 0.7410]); hold on;
+plot(t, Gy(:,1)/10000, 'linewidth', 2, 'Color',[0 0.4470 0.7410]); hold on;
 plot(t, Gy(:,2), 'linewidth', 2, 'Color',[0.8500 0.3250 0.0980]);
 plot(t, Gy(:,3), 'linewidth', 2, 'Color',[0.4660 0.6740 0.1880]);
 plot(t, GInf,'*', 'markersize', 10, 'Color',[0.8500 0.3250 0.0980]);
@@ -71,33 +76,31 @@ set(gca, 'FontSize', 15);
 
 
 % For SL
-
-% Initial conditions: 9997 susceptible, 0 exposed, 3 infected, 0 recovered
-y0 = [9997 0 3 0];
-
-% tspan will hold the times for which to solve the system
-% of ODEs. We want to solve it at the times that
-% correspond to our data
-tspan = t;
-
-% Try solving the system at a guess for good parameter values
-p0 = [.01 .1 1];
-
-Sp_opt = seir_optimize(SInf.', SDeath.', tspan, y0, p0)
-
-[t,Sy] = ode45(@seir_ode, tspan, y0, [], Sp_opt);
-
-fig3 = figure;
-plot(t, Sy(:,1), 'linewidth', 2, 'Color',[0 0.4470 0.7410]); hold on;
-plot(t, Sy(:,2), 'linewidth', 2, 'Color',[0.8500 0.3250 0.0980]);
-plot(t, Sy(:,3), 'linewidth', 2, 'Color',[0.4660 0.6740 0.1880]);
-plot(t, SInf,'*', 'markersize', 10, 'Color',[0.8500 0.3250 0.0980]);
-plot(t, SDeath, '+', 'markersize', 10, 'Color',[0.4660 0.6740 0.1880]);
-title('Prediction & Data in SL');
-xlabel('month');
-ylabel('number');
-legend('Pre-S', 'Pre-I', 'Pre-R', 'SInf', 'SDeath', 'Location', 'northwest');
-set(gca, 'FontSize', 15);
-% close(fig3);
-
-% Explore how population size can affect models
+% 
+% % Initial conditions: 9997 susceptible, 3 infected, 0 recovered
+% y0 = [9997 3 0];
+% 
+% % tspan will hold the times for which to solve the system
+% % of ODEs. We want to solve it at the times that
+% % correspond to our data
+% tspan = t;
+% 
+% % Try solving the system at a guess for good parameter values
+% p0 = [.01 .1];
+% 
+% Sp_opt = sir_optimize(SInf.', SDeath.', tspan, y0, p0)
+% 
+% [t,Sy] = ode45(@sir_ode, tspan, y0, [], Sp_opt);
+% 
+% fig3 = figure;
+% plot(t, Sy(:,1)/10000, 'linewidth', 2, 'Color',[0 0.4470 0.7410]); hold on;
+% plot(t, Sy(:,2), 'linewidth', 2, 'Color',[0.8500 0.3250 0.0980]);
+% plot(t, Sy(:,3), 'linewidth', 2, 'Color',[0.4660 0.6740 0.1880]);
+% plot(t, SInf,'*', 'markersize', 10, 'Color',[0.8500 0.3250 0.0980]);
+% plot(t, SDeath, '+', 'markersize', 10, 'Color',[0.4660 0.6740 0.1880]);
+% title('Prediction & Data in SL');
+% xlabel('month');
+% ylabel('number');
+% legend('Pre-S', 'Pre-I', 'Pre-R', 'SInf', 'SDeath', 'Location', 'northwest');
+% set(gca, 'FontSize', 15);
+% % close(fig3);
